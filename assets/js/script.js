@@ -34,7 +34,7 @@
 // 6.1 after they press enter on high score page return to start page with high scores visible 
 
 var startButton = document.getElementById('start-btn')
-var nextButton = document.getElementById('next-btn')
+var nextButton = document.getElementById('next')
 var questionContainerElement = document.getElementById('question-container')
 var questionElement = document.getElementById('question')
 var answerButtonsElement = document.getElementById('answer-buttons')
@@ -171,7 +171,7 @@ var endGame = function () {// redirect to a new webpage that has highscore
 
 
 var element = document.getElementById("timer");
-
+document.getElementById("startGame").addEventListener("click")
 var myTimer = setInterval(function () {
     // console.log(timer);
     if (timer > 0) {

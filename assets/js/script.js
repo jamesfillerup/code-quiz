@@ -32,93 +32,16 @@
 
 // 6 start page shows up with high score
 // 6.1 after they press enter on high score page return to start page with high scores visible 
+var startButton = document.getElementById("start-btn")
+var nextQuestion = document.getElementsByClassName("next")
+var answerButtonsEl = document.getElementById("answer-buttons")
+var questionContainerEl = document.getElementById("question-container");
+var questionEl = document.getElementById("question")
+var currentQuestion = 0;
+var element = document.getElementById("timer");
 
-var startButton = document.getElementById('start-btn')
-var nextButton = document.getElementById('next-btn')
-var questionContainerElement = document.getElementById('question-container')
-var questionElement = document.getElementById('question')
-var answerButtonsElement = document.getElementById('answer-buttons')
-var timer = 100;
 var score = 0;
-
-let shuffledQuestions, currentQuestionIndex
-
-startButton.addEventListener('click', startGame)
-nextButton.addEventListener('click', () => {
-    currentQuestionIndex++
-    setNextQuestion()
-})
-
-function startGame() {
-    startButton.classList.add('hide')
-    shuffledQuestions = questions.sort(() => Math.random() - .5)
-    currentQuestionIndex = 0
-    questionContainerElement.classList.remove('hide')
-    setNextQuestion()
-}
-
-function setNextQuestion() {
-    resetState()
-    showQuestion(shuffledQuestions[currentQuestionIndex])
-}
-
-function showQuestion(question) {
-    questionElement.innerText = question.question
-    question.answers.forEach(answer => {
-        var button = document.createElement('button')
-        button.innerText = answer.text
-        button.classList.add('btn')
-        console.log(answer.correct)
-        if (answer.correct) {
-            console.log("WE ARE RIGHT HERER")
-            button.dataset.correct = answer.correct
-        }
-        button.addEventListener('click', selectAnswer)
-        answerButtonsElement.appendChild(button)
-    })
-}
-
-function resetState() {
-    clearStatusClass(document.body)
-    nextButton.classList.add('hide')
-    while (answerButtonsElement.firstChild) {
-        answerButtonsElement.removeChild(answerButtonsElement.firstChild)
-    }
-}
-
-
-
-function selectAnswer(e) {
-    // console.log(e)
-
-    var selectedButton = e.target
-    var correct = selectedButton.dataset.correct
-    console.log(correct);
-    if (!correct) {
-        timer = timer - 10;
-    } else if (correct) {
-        score += 5
-        document.querySelector("#score").innerHTML = score
-    }
-}
-
-function setStatusClass(element, correct) {
-    clearStatusClass(element)
-    if (correct) {
-        element.classList.add('correct')
-    } else {
-        element.classList.add('wrong')
-    }
-}
-
-function clearStatusClass(element) {
-    element.classList.remove('correct')
-    element.classList.remove('wrong')
-}
-
-// for (var i=0; i < questions.length; i++){
-//     var response = 
-// };
+var timer = 5;
 
 var questions = [
     {
@@ -159,27 +82,81 @@ var questions = [
     }
 ]
 
-var endGame = function () {// redirect to a new webpage that has highscore
+// for (var i = 0 ; i < nextQuestion.length; i++) {
+//     nextQuestion[i].addEventListener('click', showNextQuestion(currentQuestion), false); 
+// }
 
+startButton.addEventListener('click', startGame)
 
+for (var i = 0 ; i < nextQuestion.length; i++) {
+    nextQuestion[i].setAttribute("onclick", "showNextQuestion();");
+    
+}
 
-    // if (i<=0 || question=0){ //question =0
+function startGame() {
+    console.log("game is starting");
+    myTimer();
+    startButton.classList.add('hide')
+    questionContainerEl.classList.remove('hide')
+    // answerButtonsEl.classList.remove('hide')
+    currentQuestion = 0;
+    questions.length
+    showNextQuestion()}
 
-    // }
+function showQuestion(question) {
+    questionEl.innerText = question.question
+    
+}
+
+function selectAnswer(e) {
+    console.log(e)
+    currentQuestion++;
+    var selectedButton = e.target
+    var correct = selectedButton.dataset.correct
+    // setStatusClass(document.body, correct)
+    console.log(correct);
+    if (!correct) {
+        timer = timer - 10;
+    } else if (correct) {
+        score += 5
+        document.querySelector("#score").innerHTML = score
+    }
 }
 
 
+function showNextQuestion(){
+    console.log("next question funciton");
+    // for(i=0; i<=questions.length; i++){
+        document.getElementById("question").innerHTML = questions[currentQuestion].question;
+        question.answers.forEach(answer => {
+            const button = document.createElement('button')
+            button.innerText = answer.text
+            button.classList.add('btn')
+            if (answer.correct) {
+                button.dataset.correct = answer.correct
+            }
+            button.addEventListener('click', selectAnswer)
+            answerButtonsElement.appendChild(button)
+        })
 
-var element = document.getElementById("timer");
+        //i would add a if statment if(i=questions.length){display score card}
+    // }
+}
 
-var myTimer = setInterval(function () {
-    // console.log(timer);
-    if (timer > 0) {
-        element.innerHTML = timer
-        timer--
-    }
-    else {
-        clearInterval(myTimer)
-        element.innerHTML = ("You're out of time!")
-    }
-}, 1000)
+document.getElementById("timer");
+
+function myTimer(){
+
+        myInterval = setInterval(function () {
+            console.log(timer);
+            timer--;
+            if (timer > 0) {
+                element.innerHTML = timer
+                
+            }
+            else {
+                clearInterval(myInterval)
+                element.innerHTML = ("You're out of time!")
+            }
+        }, 1000)
+}

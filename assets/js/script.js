@@ -41,7 +41,7 @@ var currentQuestion = 0;
 var element = document.getElementById("timer");
 
 var score = 0;
-var timer = 10;
+var timer = 40;
 
 var questions = [
   {
@@ -84,7 +84,7 @@ var questions = [
 ];
 
 for (var i = 0; i < nextQuestion.length; i++) {
-  nextQuestion[i].addEventListener("click", showNextQuestion, false);
+  nextQuestion[i].addEventListener("click", showNextQuestion,  false);
 }
 
 startButton.addEventListener("click", startGame);
@@ -100,6 +100,7 @@ function startGame() {
   questionContainerEl.classList.remove("hide");
   // answerButtonsEl.classList.remove('hide')
   currentQuestion = 0;
+  
   showNextQuestion();
 }
 
@@ -107,20 +108,7 @@ function showQuestion(question) {
   questionEl.innerText = question.question;
 }
 
-function selectAnswer(e) {
-  console.log(e);
-  currentQuestion++;
-  var selectedButton = e.target;
-  var correct = selectedButton.dataset.correct;
-  // setStatusClass(document.body, correct)
-  console.log(correct);
-  if (!correct) {
-    timer = timer - 10;
-  } else if (correct) {
-    score += 5;
-    document.querySelector("#score").innerHTML = score;
-  }
-}
+
 
 function showNextQuestion() {
   console.log("next question function");
@@ -130,25 +118,57 @@ function showNextQuestion() {
   for (let [key, value] of Object.entries(answerButtonsEl.children)) {
     value.textContent = questions[currentQuestion].answers[key].text;
   }
-
+  answerButtonsEl.addEventListener('click', selectAnswer)
   //i would add a if statment if(i=questions.length){display score card}
   // }
   currentQuestion++;
+}
+
+function selectAnswer(e) {
+  console.log(e);
+  currentQuestion++;
+  var selectedButton = e.target;
+  var correct = selectedButton.dataset.correct;
+  // setStatusClass(document.body, correct)
+  
+  if (!correct) {
+    timer = timer - 10;
+  } else if (correct) {
+    score += 5
+    document.getElementById("#score").innerHTML = score
+  }
+  // console.log(correct);
 }
 
 document.getElementById("timer");
 
 function myTimer() {
   myInterval = setInterval(function () {
-    console.log(timer);
+    // console.log(timer);
     timer--;
     if (timer > 0) {
-      element.innerHTML = timer;
+      element.innerHTML =("Time: ")+ timer;
     } else {
       clearInterval(myInterval);
       element.innerHTML = "You're out of time!";
+      endGame();
     }
   }, 1000);
 }
+
+function endGame(){
+  clearInterval(timer);
+
+  var card = 
+  `<h2>Game over!</h2>
+  <h3>You got a score of ` + score +  ` !</h3>
+  <input type="text" id="name" placeholder="First name"> 
+  <button onclick="setScore()">Set score!</button>`;
+  // startButton.classList.add("hide");
+  // questionContainerEl.classList.remove("hide");
+  document.getElementById("question-container").innerHTML = card;
+  
+  }
+  
 
 // Grab the question div and populate it
